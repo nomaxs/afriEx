@@ -10,16 +10,25 @@ const currencies = [...african, ...top]
 
 function latestArchive() {
 
-const years = fs.readdirSync(archiveFolder)
-const year = years.sort().reverse()[0]
+  const years = fs.readdirSync(archiveFolder).filter(f =>
+    fs.statSync(path.join(archiveFolder,f)).isDirectory()
+  )
 
-const months = fs.readdirSync(`${archiveFolder}/${year}`)
-const month = months.sort().reverse()[0]
+  const year = years.sort().reverse()[0]
 
-const days = fs.readdirSync(`${archiveFolder}/${year}/${month}`)
-const day = days.sort().reverse()[0]
+  const months = fs.readdirSync(path.join(archiveFolder, year)).filter(f =>
+    fs.statSync(path.join(archiveFolder, year, f)).isDirectory()
+  )
 
-return `${archiveFolder}/${year}/${month}/${day}`
+  const month = months.sort().reverse()[0]
+
+  const days = fs.readdirSync(path.join(archiveFolder, year, month)).filter(f =>
+    fs.statSync(path.join(archiveFolder, year, month, f)).isDirectory()
+  )
+
+  const day = days.sort().reverse()[0]
+
+  return path.join(archiveFolder, year, month, day)
 
 }
 
