@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>African Exchange Rates Today</title>
+
+<meta name="description"
+content="Live African exchange rates including Naira, Rand, Cedi, Shilling and all African currencies updated daily.">
+
+<link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<header class="hero">
+
+<h1>AFRICAN-EXCHANGE</h1>
+
+<div class="heroContent">
+
+<div class="heroText">
+
+<h3>~Quick Info</h3>
+
+<p>
+African Exchange provides a comprehensive list of all African currencies and their current exchange rates.
+</p>
+
+<button id="openCalculator">calculator</button>
+
+</div>
+
+<div class="heroImage"></div>
+
+</div>
+
+</header>
+
+
+
+<section class="filterSection">
+
+<div class="tabs">
+
+<span class="active">Non-African</span>
+<span>African</span>
+
+</div>
+
+<div class="filterScroll">
+
+<button class="scrollBtn" id="leftBtn">&lt;</button>
+
+<div id="currencyFilters"></div>
+
+<button class="scrollBtn" id="rightBtn">&gt;</button>
+
+</div>
+
+</section>
+
+
+
+<section id="currencyCards"></section>
+
+
+
+<div id="calculatorOverlay">
+
+<div class="calculatorModal">
+
+<h2>Calculator</h2>
+
+<select id="fromCurrency"></select>
+
+<select id="toCurrency"></select>
+
+<input id="amount" type="number" value="1">
+
+<button id="calculate">Calculate</button>
+
+<div id="result"></div>
+
+</div>
+
+</div>
+
+
+
+<div id="adBanner"></div>
+
+
+
+<script src="js/cache.js"></script>
+<script src="js/api.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/calculator.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ads.js"></script>
+
+</body>
+</html>
