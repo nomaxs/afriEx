@@ -6,40 +6,43 @@ const top = require("../data/topCurrencies.json")
 
 async function run() {
   try {
-    // Fetch latest rates
-    const res = await fetch("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json")
+
+    const res = await fetch("https://latest.currency-api.pages.dev/v1/currencies/usd.json")
     const data = await res.json()
 
+    const allRates = data.usd
 
-    
-    const text = await res.text()
-    console.log("API RESPONSE:", text)
+    // Combine currencies we want
+    const wanted = [...african, ...top]
 
-    const datas = JSON.parse(text)
+    const filtered = {}
 
-    
+    wanted.forEach(code => {
+      const lower = code.toLowerCase()
+      if (allRates[lower]) {
+        filtered[code] = allRates[lower]
+      }
+    })
 
-    // Get today's date components
+    const result = {
+      date: data.date,
+      base: "USD",
+      rates: filtered
+    }
+
+    // Date folders
     const today = new Date()
     const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, "0") // zero-padded
+    const month = String(today.getMonth() + 1).padStart(2, "0")
     const day = String(today.getDate()).padStart(2, "0")
 
-    // Create folder structure: archives/YYYY/MM/DD
-    const yearFolder = path.join("archives", String(year))
-    const monthFolder = path.join(yearFolder, month)
-    const dayFolder = path.join(monthFolder, day)
+    const folder = path.join("archives", String(year), month, day)
 
-    if (!fs.existsSync("archives")) fs.mkdirSync("archives")
-    if (!fs.existsSync(yearFolder)) fs.mkdirSync(yearFolder)
-    if (!fs.existsSync(monthFolder)) fs.mkdirSync(monthFolder)
-    if (!fs.existsSync(dayFolder)) fs.mkdirSync(dayFolder)
+    fs.mkdirSync(folder, { recursive: true })
 
-    // File path for today
-    const filePath = path.join(dayFolder, "rates.json")
+    const filePath = path.join(folder, "rates.json")
 
-    // Write JSON
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
+    fs.writeFileSync(filePath, JSON.stringify(result, null, 2))
 
     console.log(`✅ Archive created: ${filePath}`)
 
