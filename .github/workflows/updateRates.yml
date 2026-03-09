@@ -3,28 +3,30 @@ name: update-rates
 on:
  schedule:
   - cron: "0 2 * * *"
+ workflow_dispatch:
 
 jobs:
- update:
+ build:
 
   runs-on: ubuntu-latest
 
   steps:
 
-   - uses: actions/checkout@v3
+  - uses: actions/checkout@v3
 
-   - name: install node
-     uses: actions/setup-node@v3
-     with:
-       node-version: 18
+  - uses: actions/setup-node@v3
+    with:
+      node-version: 18
 
-   - run: node generator/generateArchives.js
-   - run: node generator/generatePages.js
-   - run: node generator/sitemapGenerator.js
+  - run: node generator/generateArchives.js
 
-   - run: |
-       git config --global user.name "bot"
-       git config --global user.email "bot@github.com"
-       git add .
-       git commit -m "update rates"
-       git push
+  - run: node generator/generatePages.js
+
+  - run: node generator/sitemapGenerator.js
+
+  - run: |
+      git config --global user.name "bot"
+      git config --global user.email "bot@github.com"
+      git add .
+      git commit -m "update rates"
+      git push
