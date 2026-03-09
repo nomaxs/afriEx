@@ -1,53 +1,54 @@
-// generatePages.js
-const fs = require("fs")
-const path = require("path")
+const fs = require("fs");
+const path = require("path");
 
-const african = require("../data/africanCurrencies.json")
-const top = require("../data/topCurrencies.json")
+const african = require("../data/africanCurrencies.json");
+const top = require("../data/topCurrencies.json");
 
-const archiveFolder = "archives"
-const currencies = [...african, ...top]
+const archiveFolder = "archives";
+const currencies = [...african, ...top];
 
+// Get the latest archive JSON file
 function latestArchive() {
   const years = fs.readdirSync(archiveFolder)
-    .filter(f => fs.statSync(path.join(archiveFolder, f)).isDirectory())
-  if (!years.length) throw new Error("No year folders found in archives/")
+    .filter(f => fs.statSync(path.join(archiveFolder, f)).isDirectory());
+  if (!years.length) throw new Error("No year folders found in archives/");
 
-  const year = years.sort().reverse()[0]
+  const year = years.sort().reverse()[0];
 
   const months = fs.readdirSync(path.join(archiveFolder, year))
-    .filter(f => fs.statSync(path.join(archiveFolder, year, f)).isDirectory())
-  if (!months.length) throw new Error(`No month folders found in archives/${year}/`)
+    .filter(f => fs.statSync(path.join(archiveFolder, year, f)).isDirectory());
+  if (!months.length) throw new Error(`No month folders found in archives/${year}/`);
 
-  const month = months.sort().reverse()[0]
+  const month = months.sort().reverse()[0];
 
   const days = fs.readdirSync(path.join(archiveFolder, year, month))
-    .filter(f => fs.statSync(path.join(archiveFolder, year, month, f)).isDirectory())
-  if (!days.length) throw new Error(`No day folders found in archives/${year}/${month}/`)
+    .filter(f => fs.statSync(path.join(archiveFolder, year, month, f)).isDirectory());
+  if (!days.length) throw new Error(`No day folders found in archives/${year}/${month}/`);
 
-  const day = days.sort().reverse()[0]
+  const day = days.sort().reverse()[0];
 
-  const archivePath = path.join(archiveFolder, year, month, day, "rates.json")
+  const archivePath = path.join(archiveFolder, year, month, day, "rates.json");
 
-  if (!fs.existsSync(archivePath)) throw new Error(`Archive file missing: ${archivePath}`)
-  const content = fs.readFileSync(archivePath, "utf-8").trim()
-  if (!content) throw new Error(`Archive file empty: ${archivePath}`)
+  if (!fs.existsSync(archivePath)) throw new Error(`Archive file missing: ${archivePath}`);
+  const content = fs.readFileSync(archivePath, "utf-8").trim();
+  if (!content) throw new Error(`Archive file empty: ${archivePath}`);
 
-  return archivePath
+  return archivePath;
 }
 
+// Generate HTML for a currency pair
 function generateHTML(base, target, rates, date) {
-  const rate = (rates[target] / rates[base]).toFixed(4)
+  const rate = (rates[target] / rates[base]).toFixed(4);
 
-  let links = ""
+  let links = "";
   currencies.forEach(c => {
     if (c !== base) {
       links += `
       <li>
         <a href="/pages/${base}-to-${c}.html">${base} to ${c}</a>
-      </li>`
+      </li>`;
     }
-  })
+  });
 
   return `
 <!DOCTYPE html>
@@ -90,28 +91,31 @@ function generateHTML(base, target, rates, date) {
 <script src="/ads/banner.js"></script>
 </body>
 </html>
-`
+`;
 }
 
+// Generate all pages for latest archive
 function generatePages() {
-  const archive = latestArchive()
-  const data = JSON.parse(fs.readFileSync(archive, "utf-8"))
+  const archive = latestArchive();
+  const data = JSON.parse(fs.readFileSync(archive, "utf-8"));
 
-  const rates = data.rates
-  const date = data.date
+  const rates = data.rates;
+  const date = data.date;
 
-  if (!fs.existsSync("pages")) fs.mkdirSync("pages")
+  if (!fs.existsSync("pages")) fs.mkdirSync("pages");
 
   currencies.forEach(base => {
     currencies.forEach(target => {
       if (base !== target) {
-        const html = generateHTML(base, target, rates, date)
-        const file = path.join("pages", `${base}-to-${target}.html`)
-        fs.writeFileSync(file, html)
+        const html = generateHTML(base, target, rates, date);
+        const file = path.join("pages", `${base}-to-${target}.html`);
+        fs.writeFileSync(file, html);
       }
-    })
-  })
-  console.log(`✅ Pages generated: ${currencies.length * (currencies.length - 1)}`)
+    });
+  });
+
+  console.log(`✅ Pages generated: ${currencies.length * (currencies.length - 1)}`);
 }
 
-generatePages()
+// Run
+generatePages();
