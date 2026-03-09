@@ -15,7 +15,7 @@ async function run() {
     const text = await res.text()
     console.log("API RESPONSE:", text)
 
-    const data = JSON.parse(text)
+    const datas = JSON.parse(text)
 
     
 
