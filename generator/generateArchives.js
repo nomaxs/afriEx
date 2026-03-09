@@ -7,7 +7,7 @@ const top = require("../data/topCurrencies.json")
 async function run() {
   try {
     // Fetch latest rates
-    const res = await fetch("https://api.exchangerate.host/latest?base=USD")
+    const res = await fetch("https://cdn.moneyconvert.net/api/latest.json")
     const data = await res.json()
 
     // Get today's date components
