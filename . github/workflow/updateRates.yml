@@ -19,7 +19,7 @@ jobs:
        node-version: 18
 
    - run: node generator/generateArchives.js
-
+   - run: node generator/generatePages.js
    - run: node generator/sitemapGenerator.js
 
    - run: |
