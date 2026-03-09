@@ -1,14 +1,16 @@
-function renderCards(rates,african){
+function renderCards(rates,currencies,base="USD"){
 
-const container=document.getElementById("currencyCards")
+const container = document.getElementById("currencyCards")
 
 container.innerHTML=""
 
-african.forEach(code=>{
+currencies.forEach(code=>{
 
-const rate=rates[code]
+if(code===base) return
 
-const card=document.createElement("div")
+const rate = (rates[code]/rates[base]).toFixed(2)
+
+const card = document.createElement("div")
 
 card.className="card"
 
