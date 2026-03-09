@@ -1,41 +1,43 @@
+// generateArchives.js
 const fs = require("fs")
 const path = require("path")
-
-const african = require("../data/africanCurrencies.json")
-const top = require("../data/topCurrencies.json")
+const fetch = require("node-fetch") // in case Node doesn't have fetch
 
 async function run() {
   try {
+    const african = require("../data/africanCurrencies.json")
+    const top = require("../data/topCurrencies.json")
+
     // Fetch latest rates
     const res = await fetch("https://api.exchangerate.host/latest?base=USD")
     const data = await res.json()
 
-    // Get today's date components
+    if (!data || !data.rates) throw new Error("API did not return rates")
+
     const today = new Date()
     const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, "0") // zero-padded
+    const month = String(today.getMonth() + 1).padStart(2, "0")
     const day = String(today.getDate()).padStart(2, "0")
 
-    // Create folder structure: archives/YYYY/MM/DD
-    const yearFolder = path.join("archives", String(year))
+    const archivesFolder = "archives"
+    const yearFolder = path.join(archivesFolder, String(year))
     const monthFolder = path.join(yearFolder, month)
     const dayFolder = path.join(monthFolder, day)
 
-    if (!fs.existsSync("archives")) fs.mkdirSync("archives")
-    if (!fs.existsSync(yearFolder)) fs.mkdirSync(yearFolder)
-    if (!fs.existsSync(monthFolder)) fs.mkdirSync(monthFolder)
-    if (!fs.existsSync(dayFolder)) fs.mkdirSync(dayFolder)
+    // Create folder structure if it doesn't exist
+    ;[archivesFolder, yearFolder, monthFolder, dayFolder].forEach(f => {
+      if (!fs.existsSync(f)) fs.mkdirSync(f)
+    })
 
-    // File path for today
     const filePath = path.join(dayFolder, "rates.json")
-
-    // Write JSON
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
 
     console.log(`✅ Archive created: ${filePath}`)
+    return filePath
 
   } catch (err) {
     console.error("❌ Error creating archive:", err)
+    process.exit(1)
   }
 }
 
