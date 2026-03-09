@@ -1,33 +1,27 @@
-const fs=require("fs")
+// sitemapGenerator.js
+const fs = require("fs")
+const path = require("path")
 
-let urls=[]
+const african = require("../data/africanCurrencies.json")
+const top = require("../data/topCurrencies.json")
 
-let african=require("data/africanCurrencies.json")
-let top=require("data/topCurrencies.json")
+// Ensure seo folder exists
+if (!fs.existsSync("../seo")) fs.mkdirSync("../seo", { recursive: true })
 
-african.forEach(a=>{
+const urls = []
 
-african.forEach(b=>{
-
-urls.push(`/archive/${a}-to-${b}`)
-
+african.forEach(a => {
+  african.forEach(b => {
+    if (a !== b) urls.push(`/pages/${a}-to-${b}.html`)
+  })
+  top.forEach(t => urls.push(`/pages/${t}-to-${a}.html`))
 })
 
-top.forEach(t=>{
-
-urls.push(`archive/${t}-to-${a}`)
-
+let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
+urls.forEach(u => {
+  xml += `<url><loc>https://site.com${u}</loc></url>`
 })
+xml += `</urlset>`
 
-})
-
-let xml=`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
-
-urls.forEach(u=>{
-xml+=`<url><loc>https://site.com${u}</loc></url>`
-})
-
-xml+=`</urlset>`
-
-fs.writeFileSync("../seo/sitemap.xml",xml)
+fs.writeFileSync("../seo/sitemap.xml", xml)
+console.log("✅ Sitemap generated: ../seo/sitemap.xml")
