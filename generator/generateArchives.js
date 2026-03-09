@@ -1,62 +1,42 @@
-// generateArchives.js
 const fs = require("fs")
 const path = require("path")
 
-// Uncomment if Node version does not support global fetch
-// const fetch = require("node-fetch")
-
-// Retry helper for fetch
-async function fetchRates(url, retries = 3, delayMs = 1000) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const res = await fetch(url)
-      const data = await res.json()
-      if (data && data.rates) return data
-      console.warn(`⚠️ Attempt ${i + 1}: API did not return rates`)
-    } catch (err) {
-      console.warn(`⚠️ Attempt ${i + 1} failed:`, err.message)
-    }
-    await new Promise(r => setTimeout(r, delayMs))
-  }
-  throw new Error("API did not return rates after retries")
-}
+const african = require("../data/africanCurrencies.json")
+const top = require("../data/topCurrencies.json")
 
 async function run() {
   try {
-    const african = require("../data/africanCurrencies.json")
-    const top = require("../data/topCurrencies.json")
+    // Fetch latest rates
+    const res = await fetch("https://api.exchangerate.host/latest?base=USD")
+    const data = await res.json()
 
-    // Fetch latest rates safely
-    const data = await fetchRates("https://api.exchangerate.host/latest?base=USD")
-    console.log("✅ API response received")
-
+    // Get today's date components
     const today = new Date()
     const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, "0")
+    const month = String(today.getMonth() + 1).padStart(2, "0") // zero-padded
     const day = String(today.getDate()).padStart(2, "0")
 
-    // Create archive folders: archives/YYYY/MM/DD
-    const archivesFolder = "archives"
-    const yearFolder = path.join(archivesFolder, String(year))
+    // Create folder structure: archives/YYYY/MM/DD
+    const yearFolder = path.join("archives", String(year))
     const monthFolder = path.join(yearFolder, month)
     const dayFolder = path.join(monthFolder, day)
 
-    ;[archivesFolder, yearFolder, monthFolder, dayFolder].forEach(f => {
-      if (!fs.existsSync(f)) fs.mkdirSync(f)
-    })
+    if (!fs.existsSync("archives")) fs.mkdirSync("archives")
+    if (!fs.existsSync(yearFolder)) fs.mkdirSync(yearFolder)
+    if (!fs.existsSync(monthFolder)) fs.mkdirSync(monthFolder)
+    if (!fs.existsSync(dayFolder)) fs.mkdirSync(dayFolder)
 
-    // Save rates.json
+    // File path for today
     const filePath = path.join(dayFolder, "rates.json")
+
+    // Write JSON
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
 
     console.log(`✅ Archive created: ${filePath}`)
-    return filePath
 
   } catch (err) {
-    console.error("❌ Error creating archive:", err.message)
-    process.exit(1)
+    console.error("❌ Error creating archive:", err)
   }
 }
 
-// Run the archive generator
 run()
