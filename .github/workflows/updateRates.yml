@@ -26,8 +26,8 @@ jobs:
       run: node generator/generateArchives.js
 
     # 4. Run page generation
-  #  - name: Generate pages
-    #  run: node generator/generatePages.js
+    - name: Generate pages
+      run: node generator/generatePages.js
 
     # 5. Run sitemap generator
     - name: Generate sitemap
