@@ -9,29 +9,23 @@ const archiveFolder = "archives"
 const currencies = [...african, ...top]
 
 function latestArchive() {
-
   const years = fs.readdirSync(archiveFolder)
     .filter(f => fs.statSync(path.join(archiveFolder,f)).isDirectory())
-
   if(years.length === 0) throw new Error("No year folders found in archives/")
-
   const year = years.sort().reverse()[0]
 
   const months = fs.readdirSync(path.join(archiveFolder, year))
     .filter(f => fs.statSync(path.join(archiveFolder, year, f)).isDirectory())
-
   if(months.length === 0) throw new Error(`No month folders found in archives/${year}/`)
-
   const month = months.sort().reverse()[0]
 
   const days = fs.readdirSync(path.join(archiveFolder, year, month))
     .filter(f => fs.statSync(path.join(archiveFolder, year, month, f)).isDirectory())
-
   if(days.length === 0) throw new Error(`No day folders found in archives/${year}/${month}/`)
-
   const day = days.sort().reverse()[0]
 
-  return path.join(archiveFolder, year, month, day)
+  // ✅ Return the full path to the JSON file
+  return path.join(archiveFolder, year, month, day, "rates.json")
 }
 
 function generateHTML(base,target,rates,date){
@@ -141,8 +135,8 @@ ${links}
 function generatePages(){
 
 const archive = latestArchive()
-
-const data = JSON.parse(fs.readFileSync(archive))
+  
+const data = JSON.parse(fs.readFileSync(archive, "utf-8"))
 
 const rates = data.rates
 const date = data.date
