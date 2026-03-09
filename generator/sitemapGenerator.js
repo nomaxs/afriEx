@@ -1,27 +1,34 @@
-// sitemapGenerator.js
 const fs = require("fs")
 const path = require("path")
 
 const african = require("../data/africanCurrencies.json")
 const top = require("../data/topCurrencies.json")
 
-// Ensure seo folder exists
-if (!fs.existsSync("../seo")) fs.mkdirSync("../seo", { recursive: true })
+// Safe path
+const seoDir = path.join(__dirname, "..", "seo")
+if (!fs.existsSync(seoDir)) fs.mkdirSync(seoDir, { recursive: true })
 
 const urls = []
 
-african.forEach(a => {
-  african.forEach(b => {
-    if (a !== b) urls.push(`/pages/${a}-to-${b}.html`)
+// Generate all combinations: african ↔ african, african ↔ top, top ↔ african, top ↔ top
+const currencies = [...african, ...top]
+
+currencies.forEach(base => {
+  currencies.forEach(target => {
+    if (base !== target) {
+      urls.push(`/pages/${base}-to-${target}.html`)
+    }
   })
-  top.forEach(t => urls.push(`/pages/${t}-to-${a}.html`))
 })
 
-let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
+let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`
+xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
 urls.forEach(u => {
-  xml += `<url><loc>https://site.com${u}</loc></url>`
+  xml += `\n  <url><loc>https://site.com${u}</loc></url>`
 })
-xml += `</urlset>`
+xml += `\n</urlset>`
 
-fs.writeFileSync("../seo/sitemap.xml", xml)
-console.log("✅ Sitemap generated: ../seo/sitemap.xml")
+const sitemapPath = path.join(seoDir, "sitemap.xml")
+fs.writeFileSync(sitemapPath, xml)
+
+console.log(`✅ Sitemap generated: ${sitemapPath}`)
