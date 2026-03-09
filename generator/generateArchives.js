@@ -1,5 +1,5 @@
-const fs=require("fs")
-const fetch=require("node-fetch")
+const fs = require("fs")
+const path = require("path")
 
 const african=require("../data/africanCurrencies.json")
 const top=require("../data/topCurrencies.json")
