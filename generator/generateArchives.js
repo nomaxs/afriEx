@@ -1,7 +1,7 @@
 // generateArchives.js
 const fs = require("fs")
 const path = require("path")
-const fetch = require("node-fetch") // in case Node doesn't have fetch
+//const fetch = require("node-fetch") // in case Node doesn't have fetch
 
 async function run() {
   try {
