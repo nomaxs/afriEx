@@ -10,6 +10,15 @@ async function run() {
     const res = await fetch("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json")
     const data = await res.json()
 
+
+    
+    const text = await res.text()
+    console.log("API RESPONSE:", text)
+
+    const data = JSON.parse(text)
+
+    
+
     // Get today's date components
     const today = new Date()
     const year = today.getFullYear()
