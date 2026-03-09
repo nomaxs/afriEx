@@ -13,7 +13,7 @@ jobs:
     # 1. Checkout repo with write permissions
     - uses: actions/checkout@v3
       with:
-        persist-credentials: true
+        persist-credentials: false  # important! so we can use token
         fetch-depth: 0
 
     # 2. Setup Node.js
@@ -26,6 +26,8 @@ jobs:
       run: node generator/generateArchives.js
 
     # 4. Run page generation
+  #  - name: Generate pages
+    #  run: node generator/generatePages.js
 
     # 5. Run sitemap generator
     - name: Generate sitemap
@@ -33,9 +35,11 @@ jobs:
 
     # 6. Commit and push changes
     - name: Commit generated files
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # automatically provided
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add archives pages seo/sitemap.xml
         git diff --cached --quiet || git commit -m "Update archives & generated pages"
-        git push
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
