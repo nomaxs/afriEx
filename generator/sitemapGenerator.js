@@ -2,8 +2,8 @@ const fs=require("fs")
 
 let urls=[]
 
-let african=require("../data/africanCurrencies.json")
-let top=require("../data/topCurrencies.json")
+let african=require("data/africanCurrencies.json")
+let top=require("data/topCurrencies.json")
 
 african.forEach(a=>{
 
@@ -15,7 +15,7 @@ urls.push(`/archive/${a}-to-${b}`)
 
 top.forEach(t=>{
 
-urls.push(`/archive/${t}-to-${a}`)
+urls.push(`archive/${t}-to-${a}`)
 
 })
 
