@@ -1,25 +1,27 @@
-let currentBase="USD"
+function renderFilters(list){
 
-function createFilterButtons(list,container){
+const container = document.getElementById("currencyFilters")
 
 container.innerHTML=""
 
-list.forEach(currency=>{
+list.forEach(code=>{
 
-let btn=document.createElement("button")
+const btn = document.createElement("button")
 
-btn.innerText=currency
+btn.innerText = code
 
-btn.onclick=()=>{
-
-currentBase=currency
-
-loadRates()
-
-}
+btn.onclick = ()=>selectCurrency(code)
 
 container.appendChild(btn)
 
 })
+
+}
+
+function selectCurrency(base){
+
+const african = window.africanCurrencies
+
+renderCards(window.rates,african,base)
 
 }
