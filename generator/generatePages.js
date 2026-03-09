@@ -4,7 +4,7 @@ const path = require("path")
 const african = require("../data/africanCurrencies.json")
 const top = require("../data/topCurrencies.json")
 
-const archiveFolder = "../archives"
+const archiveFolder = "archives"
 
 const currencies = [...african, ...top]
 
@@ -136,8 +136,8 @@ const data = JSON.parse(fs.readFileSync(archive))
 const rates = data.rates
 const date = data.date
 
-if(!fs.existsSync("../pages")){
-fs.mkdirSync("../pages")
+if(!fs.existsSync("pages")){
+fs.mkdirSync("pages")
 }
 
 currencies.forEach(base=>{
@@ -148,7 +148,7 @@ if(base!==target){
 
 const html = generateHTML(base,target,rates,date)
 
-const file = `../pages/${base}-to-${target}.html`
+const file = `pages/${base}-to-${target}.html`
 
 fs.writeFileSync(file,html)
 
