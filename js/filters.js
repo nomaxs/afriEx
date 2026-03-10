@@ -1,27 +1,3 @@
-const tabs = document.querySelectorAll(".tabs span")
-
-tabs.forEach(tab => {
-
-tab.onclick = ()=>{
-
-tabs.forEach(t=>t.classList.remove("active"))
-
-tab.classList.add("active")
-
-if(tab.innerText==="African"){
-
-renderFilters(window.africanCurrencies)
-
-}else{
-
-renderFilters(window.topCurrencies)
-
-}
-
-}
-
-})
-
 function renderFilters(list){
 
 const container = document.getElementById("currencyFilters")
@@ -42,15 +18,30 @@ container.appendChild(btn)
 
 }
 
-function selectCurrency(base,e){
+function selectCurrency(base, e){
+  const cards = document.querySelectorAll("#currencyCards .card")
+  cards.forEach(card => {
+    if(card.dataset.base === base){
+      card.style.display = "flex"  // or "block" depending on your CSS
+    }else{
+      card.style.display = "none"
+    }
+  })
 
-const african = window.africanCurrencies
+  document.querySelectorAll("#currencyFilters button")
+    .forEach(btn=>btn.classList.remove("active"))
 
-renderCards(window.rates,african,base)
-
-document.querySelectorAll("#currencyFilters button")
-.forEach(btn=>btn.classList.remove("active"))
-
-e.target.classList.add("active")
-
+  e.target.classList.add("active")
 }
+
+const tabs = document.querySelectorAll(".tabs span")
+tabs.forEach(tab=>{
+  tab.onclick = () => {
+    tabs.forEach(t=>t.classList.remove("active"))
+    tab.classList.add("active")
+    const list = tab.innerText === "African" ? window.africanCurrencies : window.topCurrencies
+    renderFilters(list)
+    // Optionally show first currency in the list
+    selectCurrency(list[0], {target: document.querySelector(`#currencyFilters button:first-child`)})
+  }
+})
