@@ -4,7 +4,7 @@ const container = document.getElementById("currencyFilters")
 
 container.innerHTML=""
 
-list.forEach(code=>{
+list.sort().forEach(code=>{
 
 const btn = document.createElement("button")
 
@@ -23,5 +23,10 @@ function selectCurrency(base){
 const african = window.africanCurrencies
 
 renderCards(window.rates,african,base)
+
+document.querySelectorAll("#currencyFilters button")
+.forEach(btn=>btn.classList.remove("active"))
+
+event.target.classList.add("active")
 
 }
