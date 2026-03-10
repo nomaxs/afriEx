@@ -1,16 +1,16 @@
-function renderCards(rates,currencies,base="USD"){
+function renderCards(rates,list,base="USD"){
 
-const container = document.getElementById("currencyCards")
+const container=document.getElementById("currencyCards")
 
 container.innerHTML=""
 
-currencies.forEach(code=>{
+list=list.slice().sort()
 
-if(code===base) return
+list.forEach(code=>{
 
-const rate = (rates[code]/rates[base]).toFixed(2)
+const rate=(rates[code]/rates[base]).toFixed(4)
 
-const card = document.createElement("div")
+const card=document.createElement("div")
 
 card.className="card"
 
@@ -20,7 +20,7 @@ card.innerHTML=`
 
 <div class="currencyIcon">¢</div>
 
-<div class="currencyName">${code}</div>
+<div class="currencyName">${base} → ${code}</div>
 
 </div>
 
