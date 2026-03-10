@@ -35,7 +35,7 @@ container.appendChild(card)
 }*/
 
 
-function renderAllCards(rates, african, top){
+function renderCards(rates, african, top){
   const container = document.getElementById("currencyCards")
   container.innerHTML = ""
   const currencies = [...african, ...top].sort()
