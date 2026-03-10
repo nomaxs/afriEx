@@ -10,10 +10,11 @@ setCache(rates)
 
 }
 
-window.rates = rates
-
 const african = await fetch("data/africanCurrencies.json").then(r=>r.json())
 const top = await fetch("data/topCurrencies.json").then(r=>r.json())
+
+window.africanCurrencies = african
+window.topCurrencies = top
 
 renderCards(rates,african)
 
