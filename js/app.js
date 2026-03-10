@@ -16,7 +16,7 @@ const top = await fetch("data/topCurrencies.json").then(r=>r.json())
 window.africanCurrencies = african
 window.topCurrencies = top
 
-renderCards(rates,african)
+renderCards(rates,african,"USD")
 
 renderFilters(top)
 
