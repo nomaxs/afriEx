@@ -39,12 +39,12 @@ function renderCards(rates, african, top) {
         </div>
         <div class="cardRow">
           <div class="rateInfo">
-            <span class="symbol">${symbols[base] || '¢'}</span> → <span class="symbol">${symbols[target] || '¢'}</span>
+            <span class="symbol">${symbols[base] || '*'}</span> → <span class="symbol">${symbols[target] || '¢'}</span>
           </div>
         </div>
         <div class="cardRow">
           <div class="amount">
-            ${symbols[target] || '¢'}${rate}
+            ${symbols[target] || '*'}${rate}
           </div>
         </div>
       `;
