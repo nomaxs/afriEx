@@ -134,7 +134,7 @@ border-color:#95C11F
 }
 
 /* CARDS */
-/* CARD CONTAINER: Grid layout for larger screens */
+/* CARD GRID */
 #currencyCards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -142,13 +142,13 @@ border-color:#95C11F
   padding: 20px;
 }
 
-/* CARD: keep it clean, responsive */
+/* CARD */
 .card {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   background: #fff;
-  padding: 16px 18px;
+  padding: 16px;
   border-radius: 12px;
   border: 1px solid #eee;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
@@ -159,42 +159,62 @@ border-color:#95C11F
   transform: translateY(-2px);
 }
 
-/* CARD LEFT */
-.cardLeft {
+/* ROWS INSIDE CARD */
+.cardRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+/* CURRENCY INFO (flag + name) */
+.currencyInfo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
-/* Currency symbol */
-.currencyIcon {
-  font-size: 24px;
-  color: #111; /* black for clarity */
+.flag {
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
 }
 
-/* Currency names */
+/* Currency name */
 .currencyName {
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* RATE INFO */
+.rateInfo {
+  font-size: 14px;
   font-weight: 500;
   color: #111;
-  white-space: nowrap;
 }
 
-/* Rate */
-.rate {
+/* SYMBOLS */
+.symbol {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* AMOUNT DISPLAY */
+.amount {
   font-size: 18px;
   font-weight: 700;
   color: #111;
-  white-space: nowrap;
-  text-align: right;
+  text-align: left;
 }
 
-/* Make sure grid adjusts well on small screens */
+/* MOBILE ADJUSTMENTS */
 @media (max-width: 600px) {
   #currencyCards {
     grid-template-columns: 1fr;
   }
-  .card {
+  .cardRow {
     flex-direction: row;
     justify-content: space-between;
   }
