@@ -134,44 +134,70 @@ border-color:#95C11F
 }
 
 /* CARDS */
-
-#currencyCards{
-display:flex;
-flex-direction:column;
-gap:16px;
-padding:20px
+/* CARD CONTAINER: Grid layout for larger screens */
+#currencyCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 20px;
 }
 
-.card{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:white;
-padding:20px;
-border-radius:12px;
-border:1px solid #eee;
-box-shadow:0 6px 14px rgba(0,0,0,0.04)
+/* CARD: keep it clean, responsive */
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s;
 }
 
-.cardLeft{
-display:flex;
-align-items:center;
-gap:14px
+.card:hover {
+  transform: translateY(-2px);
 }
 
-.currencyIcon{
-font-size:28px;
-color:#777
+/* CARD LEFT */
+.cardLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.currencyName{
-font-size:18px;
-font-weight:500
+/* Currency symbol */
+.currencyIcon {
+  font-size: 24px;
+  color: #111; /* black for clarity */
 }
 
-.rate{
-font-size:22px;
-font-weight:700
+/* Currency names */
+.currencyName {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111;
+  white-space: nowrap;
+}
+
+/* Rate */
+.rate {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Make sure grid adjusts well on small screens */
+@media (max-width: 600px) {
+  #currencyCards {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 /* SEO LINKS */
