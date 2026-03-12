@@ -7,6 +7,9 @@ const top = require("../data/topCurrencies.json");
 const archiveFolder = "archives";
 const currencies = [...african, ...top];
 
+
+
+
 // Get the latest archive JSON file
 function latestArchive() {
 
@@ -39,86 +42,123 @@ function latestArchive() {
 // Generate HTML for a currency pair
 function generateHTML(base, target, rates, date) {
 
-  const rate = (rates[target] / rates[base]).toFixed(4);
+const baseMeta = currencyMeta[base];
+const targetMeta = currencyMeta[target];
 
-  const example10 = (rate * 10).toFixed(2);
-  const example100 = (rate * 100).toFixed(2);
-  const example1000 = (rate * 1000).toFixed(2);
+const rate = (rates[target] / rates[base]).toFixed(5);
 
-  let links = "";
+const example10 = (rate * 10).toFixed(2);
+const example100 = (rate * 100).toFixed(2);
+const example1000 = (rate * 1000).toFixed(2);
 
-  currencies.forEach(c => {
+let links = "";
 
-    if (c !== base) {
+currencies.forEach(c => {
 
-      links += `
-      <li>
-        <a href="/pages/${base}-to-${c}.html">
-        ${base} to ${c} exchange rate
-        </a>
-      </li>`;
+if (c !== base) {
 
-    }
+links += `
+<li>
+<a href="/pages/${base}-to-${c}.html">
+${base} → ${c}
+</a>
+</li>`;
 
-  });
+}
 
-  return `
+});
+
+return `
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>${base} to ${target} Exchange Rate Today (${date}) | African Exchange</title>
+<title>${base} to ${target} Exchange Rate (${date})</title>
 
-<meta name="description" content="Check the latest ${base} to ${target} exchange rate today (${date}). View live conversion value, examples, and other African currency exchange rates.">
+<meta name="description"
+content="Convert ${base} to ${target}. See today's exchange rate, quick conversion examples, and other currency pairs.">
 
-<link rel="canonical" href="https://african-exchange.com/pages/${base}-to-${target}.html">
+<link rel="canonical"
+href="https://african-exchange.com/pages/${base}-to-${target}.html">
 
 <link rel="stylesheet" href="/css/styles.css">
 
 </head>
 
-
 <body>
+
 
 <header class="hero">
 
-<h1>${base} to ${target} Exchange Rate</h1>
+<h1>${base} → ${target} Exchange Rate</h1>
 
-<div class="heroContent">
+<p class="heroDate">
+Updated ${date}
+</p>
 
-<div class="heroText">
-
-<p>Live exchange rate on ${date}</p>
-
-<a href="/" class="backLink">← Back to main exchange table</a>
-
-</div>
-
-<div class="heroImage"></div>
-
-</div>
+<a href="/" class="backLink">
+← Back to exchange table
+</a>
 
 </header>
+
 
 
 <section id="currencyCards">
 
 <div class="card">
 
-<div class="cardLeft">
+<div class="cardRow">
 
-<div class="currencyIcon">¢</div>
+<div class="currencyInfo">
 
-<div class="currencyName">${base} → ${target}</div>
+<img class="flag"
+loading="lazy"
+width="24"
+height="16"
+src="/images/flags/${baseMeta.flag}.png"
+alt="${baseMeta.country} flag">
+
+<span class="currencyCode">${base}</span>
 
 </div>
 
-<div class="rate">${rate}</div>
+<div class="currencyInfo">
+
+<img class="flag"
+loading="lazy"
+width="24"
+height="16"
+src="/images/flags/${targetMeta.flag}.png"
+alt="${targetMeta.country} flag">
+
+<span class="currencyCode">${target}</span>
+
+</div>
+
+</div>
+
+
+<div class="cardRow countryRow">
+
+<span>${baseMeta.country} (${baseMeta.symbol})</span>
+
+<span class="arrow">→</span>
+
+<span>${targetMeta.country} (${targetMeta.symbol})</span>
+
+</div>
+
+
+<div class="amount">
+
+${targetMeta.symbol} ${rate}
+
+</div>
 
 </div>
 
@@ -128,7 +168,7 @@ function generateHTML(base, target, rates, date) {
 
 <section class="examples">
 
-<h2>${base} to ${target} Conversion Examples</h2>
+<h2>Quick Conversion</h2>
 
 <ul>
 
@@ -148,24 +188,32 @@ function generateHTML(base, target, rates, date) {
 
 <section class="seoText">
 
-<h2>About the ${base} to ${target} Exchange Rate</h2>
+<h2>About this currency pair</h2>
 
 <p>
-The current ${base} to ${target} exchange rate on ${date} is ${rate}. 
-Exchange rates change frequently due to global market conditions, 
-economic activity, and international trade between countries.
+
+The current exchange rate from ${baseMeta.country}'s
+<strong>${base}</strong> to
+${targetMeta.country}'s
+<strong>${target}</strong>
+is <strong>${rate}</strong> as of ${date}.
+
 </p>
 
 <p>
-If you are converting ${base} to ${target} for travel, online payments,
-business transactions, or international money transfers, checking the
-latest exchange rate is important to get the most accurate value.
+
+Exchange rates change throughout the day as financial
+markets react to economic news, global trade, and
+currency demand.
+
 </p>
 
 <p>
-This page provides the most recent ${base} to ${target} currency rate
-along with quick conversion examples and links to other African
-currency exchange rates.
+
+This page helps you quickly convert
+${base} to ${target}, view example conversions,
+and navigate to other related exchange rates.
+
 </p>
 
 </section>
@@ -174,7 +222,7 @@ currency exchange rates.
 
 <section class="seoLinks">
 
-<h2>Other ${base} Exchange Rates</h2>
+<h2>Other ${base} conversions</h2>
 
 <ul>
 
@@ -195,17 +243,11 @@ ${links}
 <script type="application/ld+json">
 
 {
-
 "@context":"https://schema.org",
-
-"@type":"Dataset",
-
-"name":"${base} to ${target} Exchange Rate",
-
-"description":"Exchange rate for ${base} to ${target} on ${date}",
-
+"@type":"ExchangeRateSpecification",
+"currency":"${base}/${target}",
+"currentExchangeRate":"${rate}",
 "dateModified":"${date}"
-
 }
 
 </script>
@@ -214,10 +256,10 @@ ${links}
 </body>
 
 </html>
-
 `;
 
 }
+
 
 
 // Generate all pages
