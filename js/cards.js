@@ -60,25 +60,20 @@ if(base===target) return
 
 const rate=(rates[target]/rates[base]).toFixed(5)
 
-const baseMeta=currencyMeta[base]||{}
-const targetMeta=currencyMeta[target]||{}
-
-const card=document.createElement("div")
-card.className="card"
-card.dataset.base=base
-card.dataset.target=target
+const baseMeta = currencyMeta[base] || {country:base, symbol:"", flag:"na"}
+const targetMeta = currencyMeta[target] || {country:target, symbol:"", flag:"na"}
 
 card.innerHTML=`
 
 <div class="cardRow">
 
 <div class="currencyInfo">
-<img class="flag" src="images/flags/${baseMeta.flag}.png">
+<img class="flag" src="images/flags/${baseMeta.flag}.png" alt="${baseMeta.country} flag">
 <span class="currencyCode">${base}</span>
 </div>
 
 <div class="currencyInfo">
-<img class="flag" src="images/flags/${targetMeta.flag}.png">
+<img class="flag" src="images/flags/${targetMeta.flag}.png" alt="${targetMeta.country} flag">
 <span class="currencyCode">${target}</span>
 </div>
 
