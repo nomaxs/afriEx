@@ -203,10 +203,25 @@ border-color:#95C11F
 
 /* AMOUNT DISPLAY */
 .amount {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #111;
   text-align: left;
+  margin-top: 6px;
+}
+
+.currencyCode{
+font-weight:600;
+font-size:15px;
+}
+
+.countryRow{
+font-size:13px;
+color:#666;
+}
+
+.arrow{
+margin:0 6px;
 }
 
 /* MOBILE ADJUSTMENTS */
