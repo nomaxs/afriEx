@@ -29,7 +29,17 @@ SOS:{country:"Somalia",symbol:"Sh",flag:"so"},
 DJF:{country:"Djibouti",symbol:"Fdj",flag:"dj"},
 KMF:{country:"Comoros",symbol:"CF",flag:"km"},
 MRU:{country:"Mauritania",symbol:"UM",flag:"mr"},
-STN:{country:"Sao Tome",symbol:"Db",flag:"st"},
+STN:{country:"Sao Tome & Principe",symbol:"Db",flag:"st"},
+CVE:{country:"Cape Verde",symbol:"$",flag:"cv"},
+LSL:{country:"Lesotho",symbol:"L",flag:"ls"},
+SZL:{country:"Eswatini",symbol:"E",flag:"sz"},
+XAF:{country:"Central African CFA",symbol:"FCFA",flag:"cm"},
+XOF:{country:"West African CFA",symbol:"CFA",flag:"sn"},
+BIF:{country:"Burundi",symbol:"FBu",flag:"bi"},
+ERN:{country:"Eritrea",symbol:"Nfk",flag:"er"},
+LYD:{country:"Libya",symbol:"LD",flag:"ly"},
+ZMW:{country:"Zambia",symbol:"ZK",flag:"zm"},
+SHP:{country:"Saint Helena",symbol:"£",flag:"sh"},
 
 USD:{country:"United States",symbol:"$",flag:"us"},
 EUR:{country:"Eurozone",symbol:"€",flag:"eu"},
@@ -63,17 +73,34 @@ const rate=(rates[target]/rates[base]).toFixed(5)
 const baseMeta = currencyMeta[base] || {country:base, symbol:"", flag:"na"}
 const targetMeta = currencyMeta[target] || {country:target, symbol:"", flag:"na"}
 
+const card = document.createElement("div")
+card.className="card"
+card.dataset.base=base
+card.dataset.target=target
+
 card.innerHTML=`
 
 <div class="cardRow">
 
 <div class="currencyInfo">
-<img class="flag" src="images/flags/${baseMeta.flag}.png" alt="${baseMeta.country} flag">
+<img class="flag"
+loading="lazy"
+width="24"
+height="16"
+src="images/flags/${baseMeta.flag}.png"
+alt="${baseMeta.country} flag">
+
 <span class="currencyCode">${base}</span>
 </div>
 
 <div class="currencyInfo">
-<img class="flag" src="images/flags/${targetMeta.flag}.png" alt="${targetMeta.country} flag">
+<img class="flag"
+loading="lazy"
+width="24"
+height="16"
+src="images/flags/${targetMeta.flag}.png"
+alt="${targetMeta.country} flag">
+
 <span class="currencyCode">${target}</span>
 </div>
 
