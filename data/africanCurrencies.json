@@ -1,7 +1,8 @@
 [
 "NGN","KES","GHS","ZAR","EGP","MAD","TND","DZD",
 "ETB","TZS","UGX","RWF","BWP","MUR","SCR","MWK",
-"MZN","NAD","AOA","CDF","SDG","GMD","GNF","LRD",
-"SLL","SOS","DJF","KMF","MRU","STN","CVE","LSL",
-"SZL","XAF","XOF","XPF","BIF","ERN","LYD","ZMW","SHP"
+"MZN","NAD","AOA","CDF","SDG","SSP","GMD","GNF",
+"LRD","SLL","SOS","DJF","KMF","MRU","STN","CVE",
+"LSL","SZL","XAF","XOF","BIF","ERN","LYD","ZMW",
+"MGA","SHP"
 ]
