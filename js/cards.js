@@ -40,6 +40,8 @@ ERN:{country:"Eritrea",symbol:"Nfk",flag:"er"},
 LYD:{country:"Libya",symbol:"LD",flag:"ly"},
 ZMW:{country:"Zambia",symbol:"ZK",flag:"zm"},
 SHP:{country:"Saint Helena",symbol:"£",flag:"sh"},
+SSP:{country:"South Sudan",symbol:"£",flag:"ss"},
+MGA:{country:"Madagascar",symbol:"Ar",flag:"mg"},
 
 USD:{country:"United States",symbol:"$",flag:"us"},
 EUR:{country:"Eurozone",symbol:"€",flag:"eu"},
@@ -68,7 +70,11 @@ currencies.forEach(target=>{
 
 if(base===target) return
 
-const rate=(rates[target]/rates[base]).toFixed(5)
+let rate="N/A"
+
+if(rates[target] && rates[base]){
+rate=(rates[target]/rates[base]).toFixed(5)
+}
 
 const baseMeta = currencyMeta[base] || {country:base, symbol:"", flag:"na"}
 const targetMeta = currencyMeta[target] || {country:target, symbol:"", flag:"na"}
