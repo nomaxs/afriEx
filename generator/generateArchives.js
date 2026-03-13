@@ -5,50 +5,66 @@ const african = require("../data/africanCurrencies.json")
 const top = require("../data/topCurrencies.json")
 
 async function run() {
-  try {
 
-    const res = await fetch("https://latest.currency-api.pages.dev/v1/currencies/usd.json")
-    const data = await res.json()
+try {
 
-    const allRates = data.usd
+const res = await fetch("https://latest.currency-api.pages.dev/v1/currencies/usd.json")
+const data = await res.json()
 
-    // Combine currencies we want
-    const wanted = [...african, ...top]
+const allRates = data.usd
 
-    const filtered = {}
+// ensure USD exists
+allRates["usd"] = 1
 
-    wanted.forEach(code => {
-      const lower = code.toLowerCase()
-      if (allRates[lower]) {
-        filtered[code] = allRates[lower]
-      }
-    })
+const wanted = [...african, ...top]
 
-    const result = {
-      date: data.date,
-      base: "USD",
-      rates: filtered
-    }
+const filtered = {}
 
-    // Date folders
-    const today = new Date()
-    const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, "0")
-    const day = String(today.getDate()).padStart(2, "0")
+wanted.forEach(code => {
 
-    const folder = path.join("archives", String(year), month, day)
+const lower = code.toLowerCase()
 
-    fs.mkdirSync(folder, { recursive: true })
+if (lower in allRates) {
 
-    const filePath = path.join(folder, "rates.json")
+filtered[code] = allRates[lower]
 
-    fs.writeFileSync(filePath, JSON.stringify(result, null, 2))
+} else {
 
-    console.log(`✅ Archive created: ${filePath}`)
+console.log(`⚠ Missing rate for ${code}`)
 
-  } catch (err) {
-    console.error("❌ Error creating archive:", err)
-  }
+}
+
+})
+
+const result = {
+date: data.date,
+base: "USD",
+rates: filtered
+}
+
+// create date folders
+const today = new Date()
+
+const year = today.getFullYear()
+const month = String(today.getMonth() + 1).padStart(2, "0")
+const day = String(today.getDate()).padStart(2, "0")
+
+const folder = path.join("archives", String(year), month, day)
+
+fs.mkdirSync(folder, { recursive: true })
+
+const filePath = path.join(folder, "rates.json")
+
+fs.writeFileSync(filePath, JSON.stringify(result, null, 2))
+
+console.log(`✅ Archive created: ${filePath}`)
+
+} catch (err) {
+
+console.error("❌ Error creating archive:", err)
+
+}
+
 }
 
 run()
