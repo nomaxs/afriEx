@@ -50,6 +50,8 @@ ERN:{country:"Eritrea",symbol:"Nfk",flag:"er"},
 LYD:{country:"Libya",symbol:"LD",flag:"ly"},
 ZMW:{country:"Zambia",symbol:"ZK",flag:"zm"},
 SHP:{country:"Saint Helena",symbol:"£",flag:"sh"},
+SSP:{country:"South Sudan",symbol:"£",flag:"ss"},
+MGA:{country:"Madagascar",symbol:"Ar",flag:"mg"},
 
 USD:{country:"United States",symbol:"$",flag:"us"},
 EUR:{country:"Eurozone",symbol:"€",flag:"eu"},
@@ -100,6 +102,8 @@ function generateHTML(base, target, rates, date) {
 
 const baseMeta = currencyMeta[base];
 const targetMeta = currencyMeta[target];
+
+if(!rates[base] || !rates[target]) return "";
 
 const rate = (rates[target] / rates[base]).toFixed(5);
 
