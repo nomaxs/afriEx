@@ -72,8 +72,11 @@ if(base===target) return
 
 let rate="N/A"
 
-if(rates[target] && rates[base]){
-rate=(rates[target]/rates[base]).toFixed(5)
+const baseRate = Number(rates[base])
+const targetRate = Number(rates[target])
+
+if(!isNaN(baseRate) && !isNaN(targetRate)){
+rate=(targetRate/baseRate).toFixed(5)
 }
 
 const baseMeta = currencyMeta[base] || {country:base, symbol:"", flag:"na"}
