@@ -70,13 +70,15 @@ currencies.forEach(target=>{
 
 if(base===target) return
 
-let rate="N/A"
+let rate = "N/A"
+
+if(rates[target] !== undefined && rates[base] !== undefined){
 
 const baseRate = Number(rates[base])
 const targetRate = Number(rates[target])
 
-if(!isNaN(baseRate) && !isNaN(targetRate)){
-rate=(targetRate/baseRate).toFixed(5)
+rate = (targetRate / baseRate).toFixed(5)
+
 }
 
 const baseMeta = currencyMeta[base] || {country:base, symbol:"", flag:"na"}
