@@ -119,7 +119,7 @@ if (c !== base) {
 
 links += `
 <li>
-<a href="/pages/${base}-to-${c}.html">
+<a href="/pages/${date.split("-").join("/")}/${base}-to-${c}-exchange-${date}.html">
 ${base} → ${c}
 </a>
 </li>`;
@@ -143,7 +143,7 @@ return `
 content="Convert ${base} to ${target}. See today's exchange rate, quick conversion examples, and other currency pairs.">
 
 <link rel="canonical"
-href="https://african-exchange.com/pages/${base}-to-${target}.html">
+href="https://african-exchange.com/pages/${date.split("-").join("/")}/${base}-to-${target}-exchange-${date}.html">
 
 <link rel="stylesheet" href="/css/styles.css">
 
@@ -333,9 +333,14 @@ function generatePages() {
 
   const date = data.date;
 
+  const [year, month, day] = date.split("-");
 
-  if (!fs.existsSync("pages"))
-    fs.mkdirSync("pages");
+
+  const pageDir = path.join("pages", year, month, day);
+
+  if (!fs.existsSync(pageDir)) {
+    fs.mkdirSync(pageDir, { recursive: true });
+  }
 
 
   currencies.forEach(base => {
@@ -346,7 +351,9 @@ function generatePages() {
 
         const html = generateHTML(base,target,rates,date);
 
-        const file = path.join("pages",`${base}-to-${target}.html`);
+        const fileName = `${base}-to-${target}-exchange-${date}.html`;
+
+        const file = path.join(pageDir, fileName);
 
         fs.writeFileSync(file,html);
 
