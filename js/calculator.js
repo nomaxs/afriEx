@@ -1,3 +1,21 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+const overlay = document.getElementById("calculatorOverlay")
+const fromSelect = document.getElementById("fromCurrency")
+const toSelect = document.getElementById("toCurrency")
+const amountInput = document.getElementById("amount")
+const resultBox = document.getElementById("result")
+
+document.getElementById("openCalculator").onclick = () => {
+overlay.style.display = "flex"
+}
+
+overlay.onclick = e => {
+if(e.target === overlay){
+overlay.style.display = "none"
+}
+}
+
 const currencyMeta = {
 
 NGN:{country:"Nigeria",symbol:"₦",flag:"ng"},
@@ -57,26 +75,26 @@ SGD:{country:"Singapore",symbol:"$",flag:"sg"},
 HKD:{country:"Hong Kong",symbol:"$",flag:"hk"}
 }
 
-const overlay = document.getElementById("calculatorOverlay")
+/*const overlay = document.getElementById("calculatorOverlay")
 
 const fromSelect = document.getElementById("fromCurrency")
 const toSelect = document.getElementById("toCurrency")
 const amountInput = document.getElementById("amount")
-const resultBox = document.getElementById("result")
+const resultBox = document.getElementById("result")*/
 
 /* OPEN CALCULATOR */
 
-document.getElementById("openCalculator").onclick = () => {
+/*document.getElementById("openCalculator").onclick = () => {
 overlay.style.display = "flex"
-}
+}*/
 
 /* CLOSE WHEN CLICKING OUTSIDE */
 
-overlay.onclick = e => {
+/*overlay.onclick = e => {
 if(e.target === overlay){
 overlay.style.display = "none"
 }
-}
+}*/
 
 /* POPULATE CURRENCIES */
 
@@ -146,3 +164,5 @@ resultBox.innerText = `${symbol} ${formatNumber(converted)}`
 /* INITIALIZE */
 
 loadCurrencies()
+
+})
