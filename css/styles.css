@@ -68,9 +68,9 @@ border-radius:12px;
 box-shadow:0 8px 20px rgba(0,0,0,0.08)
 }
 
-.heroImage:empty{
+/*.heroImage:empty{
 background:linear-gradient(135deg,#ececec,#f7f7f7)
-}
+}*/
 
 /* FILTER */
 
