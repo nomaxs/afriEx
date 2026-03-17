@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 const overlay = document.getElementById("calculatorOverlay")
+const ads = document.getElementById("adBanner")
+
 const fromSelect = document.getElementById("fromCurrency")
 const toSelect = document.getElementById("toCurrency")
 const amountInput = document.getElementById("amount")
@@ -8,11 +10,13 @@ const resultBox = document.getElementById("result")
 
 document.getElementById("openCalculator").onclick = () => {
 overlay.style.display = "flex"
+ads.style.display = "none"
 }
 
 overlay.onclick = e => {
 if(e.target === overlay){
 overlay.style.display = "none"
+ads.style.display = "flex"
 }
 }
 
