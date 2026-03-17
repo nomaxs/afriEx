@@ -282,7 +282,7 @@ z-index:5000;
 .calculatorModal{
 background:#fff;
 width:92%;
-max-width:360px;
+max-width:4i0px;
 border-radius:16px;
 box-shadow:0 25px 60px rgba(0,0,0,0.18);
 overflow:hidden;
@@ -387,16 +387,18 @@ opacity:1;
 transform:translateY(0);
 }
 }
+
 /* AD CARD */
 
 #adBanner{
 position:fixed;
-bottom:calc(18px + env(safe-area-inset-bottom));
+bottom:18px;
 left:50%;
 transform:translateX(-50%);
 
-width:92%;
+width:90%;
 max-width:320px;
+height:auto;
 aspect-ratio:320 / 90;
 
 background:#000;
@@ -405,7 +407,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 
-font-size:clamp(16px, 5vw, 28px);
+font-size:clamp(18px, 5vw, 32px);
 border-radius:14px;
 box-shadow:0 10px 40px rgba(0,0,0,0.4);
 z-index:9999;
@@ -446,6 +448,10 @@ padding:16px;
 }
 
 @media (max-width: 600px){
+
+.calculatorModal{
+  max-width:360px;
+}
 
 .heroContent{
 flex-direction:column;
