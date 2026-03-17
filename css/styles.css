@@ -59,13 +59,14 @@ color:white
 }
 
 .heroImage{
-width:180px;
-height:110px;
+width:100%;
+max-width:180px;
+aspect-ratio:1 / 1;  
 background:url("../images/hero.jpg");
 background-size:cover;
 background-position:center;
-border-radius:12px;
-box-shadow:0 8px 20px rgba(0,0,0,0.08)
+border-radius:14px;
+box-shadow:0 10px 24px rgba(0,0,0,0.08);
 }
 
 /*.heroImage:empty{
@@ -262,6 +263,7 @@ text-decoration:underline
 
 /* CALCULATOR */
 
+/* OVERLAY (slightly softer blur feel) */
 #calculatorOverlay{
 position:fixed;
 top:0;
@@ -269,20 +271,120 @@ left:0;
 width:100%;
 height:100%;
 display:none;
-background:rgba(0,0,0,.45);
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(4px);
 align-items:center;
 justify-content:center;
-z-index:5000
+z-index:5000;
 }
 
+/* MODAL */
 .calculatorModal{
-background:white;
-padding:30px;
-width:320px;
-border-radius:12px;
-box-shadow:0 20px 40px rgba(0,0,0,0.2)
+background:#fff;
+width:340px;
+border-radius:16px;
+box-shadow:0 25px 60px rgba(0,0,0,0.18);
+overflow:hidden;
+animation:fadeIn .2s ease;
 }
 
+/* HEADER */
+.calculatorHeader{
+padding:20px 22px 10px;
+font-size:20px;
+font-weight:700;
+}
+
+/* BODY */
+.calculatorBody{
+padding:18px 22px 22px;
+}
+
+/* CURRENCY ROW */
+.calcRow{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-bottom:18px;
+}
+
+/* SELECT BOX */
+.calcSelect{
+flex:1;
+padding:14px;
+border-radius:10px;
+border:none;
+background:#f2f2f2;
+font-weight:600;
+font-size:15px;
+outline:none;
+cursor:pointer;
+}
+
+/* ARROW */
+.calcArrow{
+font-size:22px;
+font-weight:700;
+color:#111;
+}
+
+/* INPUT */
+.calcInput{
+width:100%;
+padding:16px;
+font-size:18px;
+border-radius:10px;
+border:2px solid #ddd;
+outline:none;
+margin-bottom:18px;
+transition:.2s;
+}
+
+.calcInput:focus{
+border-color:#95C11F;
+}
+
+/* BUTTON */
+.calcBtn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#95C11F;
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.2s;
+}
+
+.calcBtn:hover{
+background:#7ea819;
+}
+
+/* RESULT AREA */
+.calcResult{
+margin-top:20px;
+padding:18px 22px;
+background:#f6f6f6;
+border-top:1px solid #eee;
+font-size:24px;
+font-weight:700;
+text-align:right;
+}
+
+/* ANIMATION */
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
 /* AD CARD */
 
 #adBanner{
