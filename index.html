@@ -69,27 +69,40 @@ African Exchange provides a comprehensive list of all African currencies and the
 <section id="currencyCards"></section>
 
 
-
 <div id="calculatorOverlay">
+  <div class="calculatorModal">
 
-<div class="calculatorModal">
+    <div class="calculatorHeader">
+      Calculator
+    </div>
 
-<h2>Calculator</h2>
+    <div class="calculatorBody">
 
-<select id="fromCurrency"></select>
+      <div class="calcRow">
+        <select id="fromCurrency" class="calcSelect"></select>
 
-<select id="toCurrency"></select>
+        <div class="calcArrow">→</div>
 
-<input id="amount" type="number" value="1">
+        <select id="toCurrency" class="calcSelect"></select>
+      </div>
 
-<button id="calculate">Calculate</button>
+      <input id="amount" class="calcInput" type="number" placeholder="Enter amount">
 
-<div id="result"></div>
+      <button id="calculate" class="calcBtn">
+        Calculate
+      </button>
 
+    </div>
+
+    <div id="result" class="calcResult">
+      ₦ 0
+    </div>
+
+  </div>
 </div>
 
-</div>
-
+<br>
+<br>
 <br>
 <br>
 <br>
