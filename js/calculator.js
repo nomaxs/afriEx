@@ -20,7 +20,6 @@ ads.style.display = "flex"
 }
 }
 
-})
 
 
   
