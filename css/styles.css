@@ -332,7 +332,7 @@ color:#111;
 
 /* INPUT */
 .calcInput{
-width:98%;
+width:95%;
 padding:16px;
 font-size:18px;
 border-radius:10px;
@@ -390,6 +390,7 @@ transform:translateY(0);
 
 #adBanner{
 position:fixed;
+aspect-ratio:1 / 1;  
 bottom:18px;
 left:50%;
 transform:translateX(-50%);
