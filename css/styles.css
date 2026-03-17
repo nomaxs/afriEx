@@ -281,8 +281,8 @@ z-index:5000;
 /* MODAL */
 .calculatorModal{
 background:#fff;
-/*width:340px;*/
-width:fit-content;
+width:92%;
+max-width:360px;
 border-radius:16px;
 box-shadow:0 25px 60px rgba(0,0,0,0.18);
 overflow:hidden;
@@ -332,7 +332,8 @@ color:#111;
 
 /* INPUT */
 .calcInput{
-width:93%;
+width:100%;
+box-sizing: border-box;
 padding:16px;
 font-size:18px;
 border-radius:10px;
@@ -390,13 +391,12 @@ transform:translateY(0);
 
 #adBanner{
 position:fixed;
-bottom:18px;
+bottom:calc(18px + env(safe-area-inset-bottom));
 left:50%;
 transform:translateX(-50%);
 
-width:90%;
+width:92%;
 max-width:320px;
-height:auto;
 aspect-ratio:320 / 90;
 
 background:#000;
@@ -405,8 +405,56 @@ display:flex;
 align-items:center;
 justify-content:center;
 
-font-size:clamp(18px, 5vw, 32px);
+font-size:clamp(16px, 5vw, 28px);
 border-radius:14px;
 box-shadow:0 10px 40px rgba(0,0,0,0.4);
 z-index:9999;
+}
+
+@media (max-width: 480px){
+
+.calculatorBody{
+padding:16px;
+}
+
+/* Stack currency selectors vertically */
+.calcRow{
+flex-direction:column;
+align-items:stretch;
+gap:10px;
+}
+
+/* Arrow centered */
+.calcArrow{
+text-align:center;
+transform:rotate(90deg);
+}
+
+/* Bigger tap areas */
+.calcSelect{
+width:100%;
+padding:16px;
+font-size:16px;
+}
+
+/* Result smaller for small screens */
+.calcResult{
+font-size:20px;
+padding:16px;
+}
+
+}
+
+@media (max-width: 600px){
+
+.heroContent{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.heroImage{
+max-width:100%;
+width:100%;
+}
+
 }
