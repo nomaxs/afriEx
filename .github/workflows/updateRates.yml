@@ -33,6 +33,10 @@ jobs:
     - name: Generate sitemap
       run: node generator/sitemapGenerator.js
 
+    # Generate static homepage
+    - name: Generate index page
+      run: node generator/generateIndex.js
+
     # 6. Commit and push changes
     - name: Commit generated files
       env:
@@ -40,6 +44,6 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add archives pages seo/sitemap.xml
+        git add archives pages seo/sitemap.xml index.html
         git diff --cached --quiet || git commit -m "Update archives & generated pages"
         git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
