@@ -34,18 +34,6 @@ const [year,month,day] = date.split("-")
 
 let existingUrls = new Set();
 
-if (fs.existsSync(sitemapPath)) {
-  const existingXML = fs.readFileSync(sitemapPath, "utf-8");
-
-  const matches = existingXML.match(/<loc>(.*?)<\/loc>/g);
-
-  if (matches) {
-    matches.forEach(m => {
-      const url = m.replace("<loc>", "").replace("</loc>", "");
-      existingUrls.add(url);
-    });
-  }
-}
 
 // Generate all combinations: african ↔ african, african ↔ top, top ↔ african, top ↔ top
 const currencies = [...african, ...top]
@@ -71,6 +59,20 @@ allUrls.forEach(u => {
 xml += `\n</urlset>`;
 
 const sitemapPath = path.join(seoDir, "sitemap.xml")
+
+if (fs.existsSync(sitemapPath)) {
+  const existingXML = fs.readFileSync(sitemapPath, "utf-8");
+
+  const matches = existingXML.match(/<loc>(.*?)<\/loc>/g);
+
+  if (matches) {
+    matches.forEach(m => {
+      const url = m.replace("<loc>", "").replace("</loc>", "");
+      existingUrls.add(url);
+    });
+  }
+}
+
 fs.writeFileSync(sitemapPath, xml)
 
 console.log(`✅ Sitemap generated: ${sitemapPath}`)
