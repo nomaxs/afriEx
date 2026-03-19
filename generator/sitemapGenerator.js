@@ -32,23 +32,43 @@ const urls = []
 const date = latestDate()
 const [year,month,day] = date.split("-")
 
+let existingUrls = new Set();
+
+if (fs.existsSync(sitemapPath)) {
+  const existingXML = fs.readFileSync(sitemapPath, "utf-8");
+
+  const matches = existingXML.match(/<loc>(.*?)<\/loc>/g);
+
+  if (matches) {
+    matches.forEach(m => {
+      const url = m.replace("<loc>", "").replace("</loc>", "");
+      existingUrls.add(url);
+    });
+  }
+}
+
 // Generate all combinations: african ↔ african, african ↔ top, top ↔ african, top ↔ top
 const currencies = [...african, ...top]
+
+const allUrls = new Set([...existingUrls]);
 
 currencies.forEach(base => {
   currencies.forEach(target => {
     if (base !== target) {
-      urls.push(`/pages/${year}/${month}/${day}/${base}-to-${target}-exchange-${date}.html`)
+      const url = `${SITE_URL}/pages/${year}/${month}/${day}/${base}-to-${target}-exchange-${date}.html`;
+      allUrls.add(url);
     }
-  })
-})
+  });
+});
 
-let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`
-xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
-urls.forEach(u => {
-  xml += `\n  <url><loc>${SITE_URL}${u}</loc></url>`
-})
-xml += `\n</urlset>`
+let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+
+allUrls.forEach(u => {
+  xml += `\n  <url><loc>${u}</loc></url>`;
+});
+
+xml += `\n</urlset>`;
 
 const sitemapPath = path.join(seoDir, "sitemap.xml")
 fs.writeFileSync(sitemapPath, xml)
