@@ -69,10 +69,6 @@ border-radius:14px;
 box-shadow:0 10px 24px rgba(0,0,0,0.08);
 }
 
-/*.heroImage:empty{
-background:linear-gradient(135deg,#ececec,#f7f7f7)
-}*/
-
 /* FILTER */
 
 .filterSection{
@@ -134,14 +130,12 @@ color:white;
 border-color:#95C11F
 }
 
-/* CARDS */
 /* CARD GRID */
 #currencyCards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
   padding: 20px;
-  padding-bottom: calc(120px + 20px);
 }
 
 /* CARD */
