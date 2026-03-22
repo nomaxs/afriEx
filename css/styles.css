@@ -277,7 +277,6 @@ z-index:5000;
 .calculatorModal{
 background:#fff;
 width:92%;
-max-width:4i0px;
 border-radius:16px;
 box-shadow:0 25px 60px rgba(0,0,0,0.18);
 overflow:hidden;
@@ -458,4 +457,102 @@ max-width:100%;
 width:100%;
 }
 
+}
+
+/* ========================= */
+/* ARCHIVE PAGE IMPROVEMENTS */
+/* ========================= */
+
+/* Header extra info */
+.heroDate{
+font-size:13px;
+color:#666;
+margin-top:6px;
+text-align:center;
+}
+
+.backLink{
+display:inline-block;
+margin-top:12px;
+font-size:14px;
+color:#95C11F;
+text-decoration:none;
+font-weight:600;
+}
+
+.backLink:hover{
+text-decoration:underline;
+}
+
+/* Sections spacing */
+.examples,
+.seoText,
+.seoLinks{
+padding:24px;
+max-width:900px;
+margin:0 auto;
+}
+
+/* Section titles */
+.examples h2,
+.seoText h2,
+.seoLinks h2{
+font-size:18px;
+margin-bottom:12px;
+}
+
+/* Conversion list */
+.examples ul{
+padding-left:18px;
+margin:0;
+}
+
+.examples li{
+margin-bottom:8px;
+font-size:14px;
+}
+
+/* Paragraph text */
+.seoText p{
+font-size:14px;
+color:#444;
+margin-bottom:12px;
+line-height:1.6;
+}
+
+/* Improve seo links layout */
+.seoLinks ul{
+columns:2;
+gap:20px;
+}
+
+.seoLinks li{
+margin-bottom:8px;
+}
+
+.seoLinks a{
+display:block;
+padding:6px 0;
+font-size:14px;
+}
+
+/* Mobile optimization */
+@media (max-width:600px){
+
+.examples,
+.seoText,
+.seoLinks{
+padding:18px;
+}
+
+.seoLinks ul{
+columns:1;
+}
+
+}
+section{
+background:#fff;
+border-radius:12px;
+margin:16px;
+box-shadow:0 4px 12px rgba(0,0,0,0.04);
 }
