@@ -242,6 +242,7 @@ ${cardsHTML}
 
   </div>
 </div>
+<div style="height:140px;"></div>
 
 <div id="adBanner"></div>
 
