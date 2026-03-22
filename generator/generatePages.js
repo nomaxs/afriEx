@@ -145,7 +145,7 @@ content="Convert ${base} to ${target}. See today's exchange rate, quick conversi
 <link rel="canonical"
 href="https://african-exchange.com/pages/${date.split("-").join("/")}/${base}-to-${target}-exchange-${date}.html">
 
-<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="../../../../css/styles.css">
 
 </head>
 
@@ -180,7 +180,7 @@ Updated ${date}
 loading="lazy"
 width="24"
 height="16"
-src="/images/flags/${baseMeta.flag}.png"
+src="../../../../images/flags/${baseMeta.flag}.png"
 alt="${baseMeta.country} flag">
 
 <span class="currencyCode">${base}</span>
@@ -193,7 +193,7 @@ alt="${baseMeta.country} flag">
 loading="lazy"
 width="24"
 height="16"
-src="/images/flags/${targetMeta.flag}.png"
+src="../../../../images/flags/${targetMeta.flag}.png"
 alt="${targetMeta.country} flag">
 
 <span class="currencyCode">${target}</span>
