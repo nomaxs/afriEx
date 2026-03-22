@@ -15,19 +15,16 @@ async function init() {
   window.africanCurrencies = african
   window.topCurrencies = top
 
-  // 3. Render all cards for SEO (all pairings)
-  renderCards(rates, african, top)  // you need to define this to create all cards with data-base attributes
-
-  // 4. Render filters (default Non-African tab)
+  // 3. Render filters (default Non-African tab)
   renderFilters(top)
 
-  // 5. Select first currency by default
+  // 4. Select first currency by default
   const firstBtn = document.querySelector("#currencyFilters button:first-child")
   if (firstBtn) {
     selectCurrency(firstBtn.innerText, { target: firstBtn })
   }
 
-  // 6. Populate calculator dropdowns
+  // 5. Populate calculator dropdowns
   populateCalculator([...african, ...top])
 }
 
