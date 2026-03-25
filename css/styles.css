@@ -145,6 +145,8 @@ border-color:#95C11F
   justify-content: space-between;
   background: #fff;
   padding: 16px;
+  text-decoration: none;
+  color: inherit;
   border-radius: 12px;
   border: 1px solid #eee;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
