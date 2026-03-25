@@ -31,9 +31,8 @@ function getRates(date) {
   return JSON.parse(fs.readFileSync(file)).rates || {}
 }
 
-/* META (same as cards.js) */
+/* META */
 const currencyMeta = {
-
 NGN:{country:"Nigeria",symbol:"₦",flag:"ng"},
 KES:{country:"Kenya",symbol:"KSh",flag:"ke"},
 GHS:{country:"Ghana",symbol:"GH₵",flag:"gh"},
@@ -89,11 +88,11 @@ AUD:{country:"Australia",symbol:"$",flag:"au"},
 CHF:{country:"Switzerland",symbol:"CHF",flag:"ch"},
 SGD:{country:"Singapore",symbol:"$",flag:"sg"},
 HKD:{country:"Hong Kong",symbol:"$",flag:"hk"}
-
 }
 
-/* GENERATE CARDS HTML */
-function generateCards(rates, currencies) {
+/* GENERATE CARDS (NOW CLICKABLE) */
+function generateCards(rates, currencies, date) {
+  const [y, m, d] = date.split("-")
   let html = ""
 
   currencies.forEach(base => {
@@ -109,8 +108,10 @@ function generateCards(rates, currencies) {
       const baseMeta = currencyMeta[base] || { country: base, symbol: "", flag: "na" }
       const targetMeta = currencyMeta[target] || { country: target, symbol: "", flag: "na" }
 
+      const link = `/pages/${y}/${m}/${d}/${base}-to-${target}-exchange-${date}.html`
+
       html += `
-<div class="card" data-base="${base}" data-target="${target}">
+<a href="${link}" class="card" data-base="${base}" data-target="${target}">
 
   <div class="cardRow">
     <div class="currencyInfo">
@@ -134,7 +135,7 @@ function generateCards(rates, currencies) {
     ${targetMeta.symbol} ${rate}
   </div>
 
-</div>
+</a>
 `
     })
   })
@@ -148,12 +149,11 @@ const rates = getRates(date)
 
 const currencies = [...african, ...top].sort()
 
-const cardsHTML = generateCards(rates, currencies)
+const cardsHTML = generateCards(rates, currencies, date)
 
-/* FULL INDEX HTML */
+/* FULL HTML */
 const html = `<!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -161,12 +161,18 @@ const html = `<!DOCTYPE html>
 
 <title>African Exchange Rates Today (${date})</title>
 
-<meta name="description" content="Live African exchange rates updated daily (${date}). Compare Naira, Rand, Cedi, Shilling and global currencies.">
+<meta name="description" content="Daily African exchange rates for ${date}. Compare NGN, ZAR, GHS, KES and global currencies instantly.">
+
+<meta name="robots" content="index, follow">
 
 <link rel="canonical" href="${SITE_URL}/">
 
-<!-- SEO BOOST -->
-<meta name="robots" content="index, follow">
+<!-- Open Graph -->
+<meta property="og:title" content="African Exchange Rates (${date})">
+<meta property="og:description" content="Live currency exchange rates updated daily (${date})">
+<meta property="og:url" content="${SITE_URL}/">
+
+<!-- Freshness -->
 <meta name="last-modified" content="${date}">
 <meta http-equiv="last-modified" content="${date}">
 
@@ -184,10 +190,15 @@ const html = `<!DOCTYPE html>
 
 <div class="heroText">
 
-<h3>Live Exchange Rates (${date})</h3>
+<h3>Live Exchange Rates – ${date}</h3>
 
 <p>
-Daily updated African and global exchange rates. Instantly compare all currency pairs.
+Explore today's snapshot of African and global currency exchange rates.  
+All rates are updated daily and archived for historical tracking.
+</p>
+
+<p>
+Each card links to a detailed page for that specific currency pair on ${date}.
 </p>
 
 <button id="openCalculator">Calculator</button>
@@ -242,6 +253,7 @@ ${cardsHTML}
 
   </div>
 </div>
+
 <div style="height:140px;"></div>
 
 <div id="adBanner"></div>
@@ -256,7 +268,6 @@ ${cardsHTML}
 </body>
 </html>`
 
-/* SAVE */
 fs.writeFileSync(path.join(__dirname, "..", "index.html"), html)
 
-console.log("✅ index.html generated with full SEO cards")
+console.log("✅ index.html generated with clickable SEO cards")
