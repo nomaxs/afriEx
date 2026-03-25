@@ -7,9 +7,13 @@ const top = require("../data/topCurrencies.json");
 const archiveFolder = "archives";
 const currencies = [...african, ...top];
 
+const SITE_URL = "https://african-exchange.com";
+
+/* =========================
+   CURRENCY META
+========================= */
 
 const currencyMeta = {
-
 NGN:{country:"Nigeria",symbol:"₦",flag:"ng"},
 KES:{country:"Kenya",symbol:"KSh",flag:"ke"},
 GHS:{country:"Ghana",symbol:"GH₵",flag:"gh"},
@@ -65,16 +69,33 @@ AUD:{country:"Australia",symbol:"$",flag:"au"},
 CHF:{country:"Switzerland",symbol:"CHF",flag:"ch"},
 SGD:{country:"Singapore",symbol:"$",flag:"sg"},
 HKD:{country:"Hong Kong",symbol:"$",flag:"hk"}
+};
 
-}
+/* =========================
+   TEXT VARIATION HELPERS
+========================= */
 
-// Get the latest archive JSON file
+const intros = [
+  "This page shows the official exchange rate",
+  "Here you can find the latest conversion rate",
+  "Below is the most recent exchange value",
+  "This conversion reflects the recorded rate",
+];
+
+const notes = [
+  "Rates may fluctuate during the day depending on market activity.",
+  "Currency values are influenced by global trade and economic events.",
+  "Exchange rates change frequently due to supply and demand.",
+];
+
+/* =========================
+   GET LATEST ARCHIVE
+========================= */
+
 function latestArchive() {
 
   const years = fs.readdirSync(archiveFolder)
     .filter(f => fs.statSync(path.join(archiveFolder, f)).isDirectory());
-
-  if (!years.length) throw new Error("No year folders found");
 
   const year = years.sort().reverse()[0];
 
@@ -88,50 +109,44 @@ function latestArchive() {
 
   const day = days.sort().reverse()[0];
 
-  const archivePath = path.join(archiveFolder, year, month, day, "rates.json");
-
-  if (!fs.existsSync(archivePath)) throw new Error("Archive file missing");
-
-  return archivePath;
-
+  return path.join(archiveFolder, year, month, day, "rates.json");
 }
 
+/* =========================
+   GENERATE HTML
+========================= */
 
-// Generate HTML for a currency pair
 function generateHTML(base, target, rates, date) {
 
-const baseMeta = currencyMeta[base];
-const targetMeta = currencyMeta[target];
+  if (!rates[base] || !rates[target]) return "";
 
-if(!rates[base] || !rates[target]) return "";
+  const baseMeta = currencyMeta[base];
+  const targetMeta = currencyMeta[target];
 
-const rate = (rates[target] / rates[base]).toFixed(5);
+  const rate = (rates[target] / rates[base]).toFixed(5);
 
-const example10 = (rate * 10).toFixed(2);
-const example100 = (rate * 100).toFixed(2);
-const example1000 = (rate * 1000).toFixed(2);
+  const intro = intros[Math.floor(Math.random() * intros.length)];
+  const note = notes[Math.floor(Math.random() * notes.length)];
 
-let links = "";
+  const [year, month, day] = date.split("-");
+  const pathDate = `${year}/${month}/${day}`;
 
-currencies.forEach(c => {
-
-if (c !== base) {
-
-links += `
+  /* SAME-DAY LINKS */
+  let links = "";
+  currencies.forEach(c => {
+    if (c !== base) {
+      links += `
 <li>
-<a href="/pages/${date.split("-").join("/")}/${base}-to-${c}-exchange-${date}.html">
-${base} → ${c}
+<a href="/pages/${pathDate}/${base}-to-${c}-exchange-${date}.html">
+${base} → ${c} (${date})
 </a>
 </li>`;
+    }
+  });
 
-}
-
-});
-
-return `
+  return `
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -139,11 +154,17 @@ return `
 
 <title>${base} to ${target} Exchange Rate (${date})</title>
 
-<meta name="description"
-content="Convert ${base} to ${target}. See today's exchange rate, quick conversion examples, and other currency pairs.">
+<meta name="description" content="${base} to ${target} exchange rate on ${date}. Convert ${base} to ${target} with live data and historical archive.">
 
-<link rel="canonical"
-href="https://african-exchange.com/pages/${date.split("-").join("/")}/${base}-to-${target}-exchange-${date}.html">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="${SITE_URL}/pages/${pathDate}/${base}-to-${target}-exchange-${date}.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="${base} to ${target} Exchange Rate (${date})">
+<meta property="og:description" content="Check ${base} to ${target} exchange rate for ${date}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${SITE_URL}/pages/${pathDate}/${base}-to-${target}-exchange-${date}.html">
 
 <link rel="stylesheet" href="../../../../css/styles.css">
 
@@ -151,13 +172,12 @@ href="https://african-exchange.com/pages/${date.split("-").join("/")}/${base}-to
 
 <body>
 
-
 <header class="hero">
 
 <h1>${base} → ${target} Exchange Rate</h1>
 
 <p class="heroDate">
-Updated ${date}
+Data for ${date} (archived daily rate)
 </p>
 
 <a href="/" class="backLink">
@@ -166,142 +186,68 @@ Updated ${date}
 
 </header>
 
-
-
 <section id="currencyCards">
 
 <div class="card">
 
 <div class="cardRow">
-
 <div class="currencyInfo">
-
-<img class="flag"
-loading="lazy"
-width="24"
-height="16"
-src="../../../../images/flags/${baseMeta.flag}.png"
-alt="${baseMeta.country} flag">
-
+<img class="flag" src="../../../../images/flags/${baseMeta.flag}.png">
 <span class="currencyCode">${base}</span>
-
 </div>
 
 <div class="currencyInfo">
-
-<img class="flag"
-loading="lazy"
-width="24"
-height="16"
-src="../../../../images/flags/${targetMeta.flag}.png"
-alt="${targetMeta.country} flag">
-
+<img class="flag" src="../../../../images/flags/${targetMeta.flag}.png">
 <span class="currencyCode">${target}</span>
-
 </div>
-
 </div>
-
 
 <div class="cardRow countryRow">
-
-<span>${baseMeta.country} (${baseMeta.symbol})</span>
-
+<span>${baseMeta.country}</span>
 <span class="arrow">→</span>
-
-<span>${targetMeta.country} (${targetMeta.symbol})</span>
-
+<span>${targetMeta.country}</span>
 </div>
-
 
 <div class="amount">
-
 ${targetMeta.symbol} ${rate}
-
 </div>
 
 </div>
 
 </section>
-
-
-
-<section class="examples">
-
-<h2>Quick Conversion</h2>
-
-<ul>
-
-<li>1 ${base} = ${rate} ${target}</li>
-
-<li>10 ${base} = ${example10} ${target}</li>
-
-<li>100 ${base} = ${example100} ${target}</li>
-
-<li>1000 ${base} = ${example1000} ${target}</li>
-
-</ul>
-
-</section>
-
-
 
 <section class="seoText">
 
-<h2>About this currency pair</h2>
+<h2>${base} to ${target} on ${date}</h2>
 
-<p>
+<p>${intro} from ${baseMeta.country} (${base}) to ${targetMeta.country} (${target}) on ${date}.</p>
 
-The current exchange rate from ${baseMeta.country}'s
-<strong>${base}</strong> to
-${targetMeta.country}'s
-<strong>${target}</strong>
-is <strong>${rate}</strong> as of ${date}.
+<p>1 ${base} equals <strong>${rate} ${target}</strong> based on archived data.</p>
 
-</p>
+<p>${note}</p>
 
-<p>
-
-Exchange rates change throughout the day as financial
-markets react to economic news, global trade, and
-currency demand.
-
-</p>
-
-<p>
-
-This page helps you quickly convert
-${base} to ${target}, view example conversions,
-and navigate to other related exchange rates.
-
-</p>
+<p>This page is part of a daily archive. Each date has its own recorded exchange values.</p>
 
 </section>
 
-
-
 <section class="seoLinks">
 
-<h2>Other ${base} conversions</h2>
+<h2>${base} conversions for ${date}</h2>
+
+<p class="smallNote">
+These links point to exchange rates recorded on ${date}.
+</p>
 
 <ul>
-
 ${links}
-
 </ul>
 
 </section>
 
-
-
 <div id="adBanner"></div>
-
 <script src="/ads/banner.js"></script>
 
-
-
 <script type="application/ld+json">
-
 {
 "@context":"https://schema.org",
 "@type":"ExchangeRateSpecification",
@@ -309,65 +255,43 @@ ${links}
 "currentExchangeRate":"${rate}",
 "dateModified":"${date}"
 }
-
 </script>
 
-
 </body>
-
 </html>
 `;
-
 }
 
+/* =========================
+   GENERATE ALL PAGES
+========================= */
 
-
-// Generate all pages
 function generatePages() {
 
   const archive = latestArchive();
-
   const data = JSON.parse(fs.readFileSync(archive,"utf-8"));
 
   const rates = data.rates;
-
   const date = data.date;
 
   const [year, month, day] = date.split("-");
-
-
   const pageDir = path.join("pages", year, month, day);
 
   if (!fs.existsSync(pageDir)) {
     fs.mkdirSync(pageDir, { recursive: true });
   }
 
-
   currencies.forEach(base => {
-
     currencies.forEach(target => {
-
-      if(base !== target){
-
-        const html = generateHTML(base,target,rates,date);
-
+      if (base !== target) {
+        const html = generateHTML(base, target, rates, date);
         const fileName = `${base}-to-${target}-exchange-${date}.html`;
-
-        const file = path.join(pageDir, fileName);
-
-        fs.writeFileSync(file,html);
-
+        fs.writeFileSync(path.join(pageDir, fileName), html);
       }
-
     });
-
   });
 
-
-  console.log(`✅ Pages generated: ${currencies.length * (currencies.length - 1)}`);
-
+  console.log(`✅ Pages generated for ${date}`);
 }
 
-
-// Run
 generatePages();
