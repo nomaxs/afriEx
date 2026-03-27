@@ -3,76 +3,114 @@ const path = require("path")
 
 const african = require("../data/africanCurrencies.json")
 const top = require("../data/topCurrencies.json")
-const SITE_URL = "https://african-exchange.com";
+
+const SITE_URL = "https://african-exchange.com"
+
+/* =========================
+   GET LATEST DATE
+========================= */
 
 function latestDate() {
+  const archiveFolder = path.join(__dirname,"..","archives")
 
-const archiveFolder = path.join(__dirname,"..","archives")
+  const years = fs.readdirSync(archiveFolder)
+  const year = years.sort().reverse()[0]
 
-const years = fs.readdirSync(archiveFolder)
-const year = years.sort().reverse()[0]
+  const months = fs.readdirSync(path.join(archiveFolder,year))
+  const month = months.sort().reverse()[0]
 
-const months = fs.readdirSync(path.join(archiveFolder,year))
-const month = months.sort().reverse()[0]
+  const days = fs.readdirSync(path.join(archiveFolder,year,month))
+  const day = days.sort().reverse()[0]
 
-const days = fs.readdirSync(path.join(archiveFolder,year,month))
-const day = days.sort().reverse()[0]
-
-return `${year}-${month}-${day}`
-
+  return `${year}-${month}-${day}`
 }
 
+/* =========================
+   SETUP
+========================= */
 
-// Safe path
 const seoDir = path.join(__dirname, "..", "seo")
 if (!fs.existsSync(seoDir)) fs.mkdirSync(seoDir, { recursive: true })
 
-const urls = []
+const sitemapIndexPath = path.join(seoDir, "sitemap_index.xml")
 
 const date = latestDate()
-const [year,month,day] = date.split("-")
+const [year, month, day] = date.split("-")
 
-let existingUrls = new Set();
-
-
-// Generate all combinations: african ↔ african, african ↔ top, top ↔ african, top ↔ top
 const currencies = [...african, ...top]
 
-const allUrls = new Set([...existingUrls]);
+/* =========================
+   CREATE DAILY SITEMAP
+========================= */
 
-currencies.forEach(base => {
-  currencies.forEach(target => {
-    if (base !== target) {
-      const url = `${SITE_URL}/pages/${year}/${month}/${day}/${base}-to-${target}-exchange-${date}.html`;
-      allUrls.add(url);
-    }
-  });
-});
+const dailySitemapName = `sitemap-${date}.xml`
+const dailySitemapPath = path.join(seoDir, dailySitemapName)
 
-let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+/* Prevent rewriting same day */
+if (!fs.existsSync(dailySitemapPath)) {
 
-allUrls.forEach(u => {
-  xml += `\n  <url><loc>${u}</loc></url>`;
-});
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`
+  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
 
-xml += `\n</urlset>`;
+  currencies.forEach(base => {
+    currencies.forEach(target => {
+      if (base !== target) {
 
-const sitemapPath = path.join(seoDir, "sitemap.xml")
+        const url = `${SITE_URL}/pages/${year}/${month}/${day}/${base}-to-${target}-exchange-${date}.html`
 
-if (fs.existsSync(sitemapPath)) {
-  const existingXML = fs.readFileSync(sitemapPath, "utf-8");
+        xml += `
+  <url>
+    <loc>${url}</loc>
+    <lastmod>${date}</lastmod>
+  </url>`
+      }
+    })
+  })
 
-  const matches = existingXML.match(/<loc>(.*?)<\/loc>/g);
+  xml += `\n</urlset>`
+
+  fs.writeFileSync(dailySitemapPath, xml)
+
+  console.log(`✅ Daily sitemap created: ${dailySitemapName}`)
+} else {
+  console.log("⚠️ Daily sitemap already exists, skipping...")
+}
+
+/* =========================
+   UPDATE SITEMAP INDEX
+========================= */
+
+let sitemapEntries = new Set()
+
+if (fs.existsSync(sitemapIndexPath)) {
+  const existing = fs.readFileSync(sitemapIndexPath, "utf-8")
+  const matches = existing.match(/<loc>(.*?)<\/loc>/g)
 
   if (matches) {
     matches.forEach(m => {
-      const url = m.replace("<loc>", "").replace("</loc>", "");
-      existingUrls.add(url);
-    });
+      const url = m.replace("<loc>", "").replace("</loc>", "")
+      sitemapEntries.add(url)
+    })
   }
 }
 
-fs.writeFileSync(sitemapPath, xml)
+/* Add today's sitemap */
+const sitemapUrl = `${SITE_URL}/seo/${dailySitemapName}`
+sitemapEntries.add(sitemapUrl)
 
-console.log(`✅ Sitemap generated: ${sitemapPath}`)
+/* Build index */
+let indexXML = `<?xml version="1.0" encoding="UTF-8"?>\n`
+indexXML += `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
+
+sitemapEntries.forEach(u => {
+  indexXML += `
+  <sitemap>
+    <loc>${u}</loc>
+  </sitemap>`
+})
+
+indexXML += `\n</sitemapindex>`
+
+fs.writeFileSync(sitemapIndexPath, indexXML)
+
+console.log(`✅ Sitemap index updated. Total sitemaps: ${sitemapEntries.size}`)
