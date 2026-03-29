@@ -72,6 +72,7 @@ if (!fs.existsSync(dailySitemapPath)) {
   fs.writeFileSync(dailySitemapPath, xml)
 
   console.log(`✅ Daily sitemap created: ${dailySitemapName}`)
+  console.log("Saving to:", dailySitemapPath)
 } else {
   console.log("⚠️ Daily sitemap already exists, skipping...")
 }
