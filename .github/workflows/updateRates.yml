@@ -40,10 +40,12 @@ jobs:
     # 6. Commit and push changes
     - name: Commit generated files
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # automatically provided
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add archives pages seo/sitemap.xml index.html
-        git diff --cached --quiet || git commit -m "Update archives & generated pages"
+
+        git add archives pages seo index.html
+
+        git diff --cached --quiet || git commit -m "Daily update: archives, pages, sitemap"
         git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
